@@ -8,6 +8,7 @@ Week long beginner friendly ctf taking place December 2020
 ## Internet 15: Dadjokes
 
 **Challenge**
+
 Darn! Some idiot scriptkiddy broke my favorite website full of dad jokes!
 
 I can't seem to contact the owner to fix the site
@@ -15,6 +16,7 @@ I can't seem to contact the owner to fix the site
 Can you bring it back and remove the defaced page?
 
 **Solution**
+
 The link takes you to a site that has clearly been defaced. Looking at the source, there's a comment that says:
 ```html
 <!-- Hey bozo! I left your original index file under index_backup.html so you can see how your site looked before I used my l33t skillz to deface it. -->
@@ -42,12 +44,14 @@ http://timesink.be/dadjokes/jokes/submit.php?filename=../index.html&title=test&c
 That worked! We are given the flag after submitting that payload.
 
 **Flag**
+
 ```
 brixelCTF{lamejoke}
 ```
 
 ## Internet 15: Pathfinders #1
 **Challenge**
+
 These f*cking religious sects!
 
 These guys brainwashed my niece into their demeted world of i-readings and other such nonsense.
@@ -59,6 +63,7 @@ can you gain access to their admin panel to shut them down?
 Their website is: http://timesink.be/pathfinder/
 
 **Solution**
+
 Navigating to the pathfinders homepage, it is immediately evident that the challenge is going to involve some sort of local file inclusion(LFI).  I assume this, because we have control over the page paremeter in the URL.  Using the members/locations links, the page paremeter changes to members.php and locations.php respectively.  
 First thing I tried was to find the passwd file, just to see if there was a LFI vulnerability.
 ```
@@ -85,6 +90,7 @@ http://timesink.be/pathfinder/index.php?page=admin/.htpasswd
 
 
 **Flag**
+
 ```
 #normally you would brute force this, but that is not in scope of this challenge. The flag is: brixelCTF{unsafe_include}
 admin:$apr1$941ydmlw$aPUW.gCFcvUbIcP0ptVQF0
@@ -92,6 +98,7 @@ admin:$apr1$941ydmlw$aPUW.gCFcvUbIcP0ptVQF0
 
 ## Internet 20: Pathfinders #2
 **Challenge**
+
 It seems they updated their security. can you get the password for their admin section on their new site?
 
 http://timesink.be/pathfinder2/
@@ -99,6 +106,7 @@ http://timesink.be/pathfinder2/
 oh yeah, let's assume they are running a php version below 5.3.4 here...
 
 **Solution**
+
 This page looks very similar to the previous pathfinder challenge, except there's a new warning at the bottom of the page
 ```
 Due to a recent hacker intrusion, we upgraded our security to only allow for php files to be included.
@@ -119,6 +127,7 @@ http://timesink.be/pathfinder2/index.php?page=admin/.htpasswd%00.php
 ```
 
 **Flag**
+
 ```
 Great work! the flag is brixelCTF{outdated_php}
 ```
