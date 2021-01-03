@@ -4,6 +4,214 @@ Week long beginner friendly ctf taking place December 2020
 
 ## Overview
 
+## Internet 5: Easy
+
+**Challenge**
+
+On the homepage there is a hidden flag. It's a Source of easy points!
+
+**Solution**
+Looking at the source for the home page there's an html comment containing the flag
+
+**Flag**
+
+```
+<!-- hidden flag: 'brixelCTF{notsosecret}' -->
+```
+
+## Internet 5: Hidden Code
+
+**Challenge**
+
+Something strange happens on the brixel website when you enter the konami code
+
+flag = the character you see floating by
+
+**Solution**
+
+I had to Google the konami code, it's been years since I've played a game of Contra.  The code is as follows, and in some older video games you could perform those button presses on the home screen to unlock something helpful in the game
+```
+Up, Up, Down, Down, Left, Right, Left, Right, B, A
+```
+
+Navigating to the brixel website and performing those same button presses causes an animation of Mario to run across the screen.  Given the hint that the flag is the character that floats by, the flag is Mario. 
+
+**Flag**
+
+```Mario```
+
+## Internet 5: robotopia
+
+**Challenge**
+
+I found this cool website, it claims to be 100% robot-free!
+
+There's nothing there yet at the moment, but at least it's robots-free. I wonder how they keep it that way?
+
+http://timesink.be/robotopia/
+
+**Solution**
+
+Given the amount of time's the word 'robot' was mentioned, it seemed obvious to check the robots.txt file, which had the flag right there. 
+
+**Flag**
+
+```
+#you found a flag! it is: brixelCTF{sadr0b0tz}
+```
+
+## Internet 5: login1
+
+**Challenge**
+
+My buddy is trying to become a web developer, he made this little login page. Can you get the password?
+
+http://timesink.be/login1/index.html
+
+**Solution**
+
+The link included in the challenge brings you to a login form.  Looking at the source for the form, it has the verify javascript function included with the password hardcoded.
+
+```
+<script type="text/javascript">
+	function verify() {
+		password = document.getElementById("the_password").value;
+		if(password == "brixelCTF{w0rst_j4v4scr1pt_3v3r!}")
+		{
+			alert("Password Verified");
+		}
+		else 
+		{
+		alert("Incorrect password");
+		}
+	}
+</script>
+```
+
+**Flag**
+
+```
+brixelCTF{w0rst_j4v4scr1pt_3v3r!}
+```
+
+## Internet 5: login2
+
+**Challenge**
+
+Cool, you found the first password! He secured it more, could you try again?
+
+http://timesink.be/login2/index.html
+
+**Solution**
+
+We are again presented with a login form.  However, this time it looks like the verify function has been obfuxcated a little bit.
+
+```
+function verify() {
+		password = document.getElementById("the_password").value;
+		split = 6;
+		if (password.substring(0, split) == 'brixel') 
+		{
+			if (password.substring(split*6, split*7) == '180790') 
+			{
+				if (password.substring(split, split*2) == 'CTF{st') 
+				{
+					if (password.substring(split*4, split*5) == '5cr1pt') 
+					{
+						if (password.substring(split*3, split*4) == 'd_j4v4') 
+						{
+							if (password.substring(split*5, split*6) == '_h3r3.') 
+							{
+								if (password.substring(split*2, split*3) == '1ll_b4') 
+								{
+									if (password.substring(split*7, split*8) == '54270}') 
+									{
+										alert("Password Verified")
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else 
+		{
+		alert("Incorrect password");
+		}
+	}
+```
+
+The solution however is as easy as concatenating all the password splits. 
+```
+(0, split), (split, split*2), (split*2, split*3), (split*3, split*4), etc...
+```
+
+**Flag**
+
+```
+brixelCTF{st1ll_b4d_j4v45cr1pt_h3r3.18079054270}
+```
+
+## Internet 5: login3
+
+**Challenge**
+
+Nice! you found another one! He changed it up a bit again, could you try again?
+
+http://timesink.be/login3/index.html
+
+**Solution**
+
+Yet again, another javascript verify function.
+
+```
+function verify() {
+		username = document.getElementById("the_username").value;
+		password = document.getElementById("the_password").value;
+		if(username == readTextFile("username.txt"))
+		{
+			if(password == readTextFile("password.txt"))
+			{
+				alert("Password Verified");
+			} else {
+				alert("Incorrect password");
+			}
+		}else{
+			alert("Incorrect username");
+		}
+		
+	}
+  ```
+This time, the password is being read from a text file stored alongside the login form.  Let's see if we can get that password.txt file...
+
+http://timesink.be/login3/password.txt
+
+**Flag**
+
+```brixelCTF{n0t_3v3n_cl05e_t0_s3cur3!}```
+
+## Intrernet 5: login4
+
+**Challenge**
+
+Whow, another one! You're good! So I told my buddy how you managed to get the password last time, and he fixed it. Could you check again please?
+
+http://timesink.be/login4/index.html
+
+**Solution**
+
+This challenge is very similar to the previous challenge, but this time when you get the password.txt file, it's base64 encrypted.  There's two ways to go about solving this, you could just copy that base64 string and decode it to get the flag, or you could just copy the line of javascript where they are decoding the password.txt file, and paste it in the developer tools console.
+
+```
+atob(readTextFile("password.txt"))
+```
+
+**Flag**
+
+```
+brixelCTF{even_base64_wont_make_you_secure}
+```
 
 ## Internet 15: Dadjokes
 
