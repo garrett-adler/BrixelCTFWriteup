@@ -441,3 +441,96 @@ Programming 10: A song...
 I wrote this song
 
 it seems I'm pretty bad at it, but hey! it could get you a flag :)
+
+**Solution**
+
+The challenge includes a file called [this](files/a_song.txt) a_song which does indeed look like a pretty bad song.  I was pretty confused by this one and had to purchase a hint, which said:
+
+```
+It would be a pretty bad song wouldn't it? it's actually code! search for a programming language that uses lyrics
+```
+Doing some quick googling, I found something called [Rockstar](https://codewithrockstar.com/online). I then found a rockstar decoder that allows you to paste in some lyrics and it'll print the output. Pasting in the song we are given it then outputs the flag!
+
+**Flag**
+
+```
+brixelCTF{
+5
+66
+7236
+34
+66
+14
+}
+```
+
+## Programming 30: Quizbot
+
+**Challenge**
+
+Legend has it there's a flag at the end when you have a perfect score
+
+http://timesink.be/quizbot
+
+**Solution**
+
+So this looks like you need to answer 1000 questions correctly.  The first question I googled the answer to and answered it manually. When I did that I was presented with the second question, and my score had increased to 1.  There's no way I want to answer all 1000 of these manually... I was curious what happened if I reset my score now. Would it choose a random question each time, or would they be the same questions in the same order each time.  I reset my score, and to my delight the first question was the same, and after I answered it, the second question was also the same.  
+Next I was curious what would happen if I answered it incorrectly. If I just click the answer button, without actually inputting any text the question changes to the second question, but I'm also given some feedback that my answer was wrong and it includes the write answer:
+```
+Wrong Answer! The answer is:
+beach boys
+```
+So.. If I just answer the 1000 questions wrong I should be able to put together a list of the right answers, and they will be in the correct order since the questions seem to be presented in a fixed order. Once I have the 1000 right answers it should be as simple as looping through that list and submitting each line as an answer.
+
+I first used a script to collect each answer and write it to a file:
+
+```
+import requests
+from bs4 import BeautifulSoup
+
+s = requests.Session()
+
+with open('answers.txt') as fp:
+	line = 'x'
+	while line:
+		line = fp.readline()
+		payload = {'insert_answer':line.strip(), 'submit':'answer'}
+		print(payload)
+		r = s.post('http://timesink.be/quizbot/index.php', data=payload).text
+		print(r)
+		if 'ctf' in r:
+			print(r)
+			break
+```
+
+And my script to submit the answers:
+
+```
+import requests
+from bs4 import BeautifulSoup
+
+s = requests.Session()
+
+i = 1
+while i < 1001:
+	payload = {'insert_answer':'', 'submit':'answer'}
+	r = s.post('http://timesink.be/quizbot/index.php', data=payload).text
+	#print(r)
+	soup = BeautifulSoup(r,'html.parser')
+	val = soup.find("div", {'id': 'answer'}).text
+	f = open("answers.txt","a")
+	f.write(val.strip() + "\n")
+	f.close()
+	i +=1
+
+print(r.text)
+```
+
+Once all the questions were answered I submitted one final get request to the page to grab the flag.
+
+**Flag**
+
+```
+brixelCTF{kn0wl3dg3}
+```
+
