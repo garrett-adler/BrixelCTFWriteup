@@ -339,3 +339,105 @@ http://timesink.be/pathfinder2/index.php?page=admin/.htpasswd%00.php
 ```
 Great work! the flag is brixelCTF{outdated_php}
 ```
+
+## Programming 10: Are you fast enough?
+
+**Challenge**
+
+Can you program something that is fast enough to submit the solution before the time runs out?
+
+http://timesink.be/speedy
+
+**Solution**
+
+The link in the challenge takes you to a site with a random string, a field to enter that string, and instructions to enter that random string within 1 second to win. 
+
+I wrote a really simple python script using beautifulsoup and requests to grab the string and post it back to the site.  
+
+```
+import requests
+from bs4 import BeautifulSoup
+
+s = requests.Session()
+
+#get the text from the page, which should have the random string
+r = s.get('http://timesink.be/speedy/').text
+
+soup = BeautifulSoup(r,'lxml')
+#Grab the random string by it's div id using beautifulsoup
+val = soup.find("div", {'id': 'rndstring'}).text
+
+#I printed the value of the randomstring just to test that it was scraped correctly
+print(val)
+
+#This is probably not necessary given we are using a session, but I was in a rush and didn't want to not include it and end up needing it
+cookies= {'PHPSESSID':'594e17ae1b3a1ff2488059810b118345'}
+
+#val = the random string I scraped
+payload = {'inputfield':val}
+print(payload)
+p = s.post('http://timesink.be/speedy/index.php', data = payload, cookies=cookies)
+print(p)
+#this should have the flag
+print(p.text)
+```
+
+**Flag**
+
+```
+brixelCTF{sp33d_d3m0n}
+```
+
+## Programming 10: Keep walking...
+
+**Challenge**
+
+This is a challenge to test your basic programming skills.
+
+Pseudo code:
+Set X = 1
+Set Y = 1
+Set previous answer = 1
+answer = X * Y + previous answer + 3
+After that => X + 1 and Y + 1 ('answer' becomes 'previous answer') and repeat this till you have X = 525.
+The final answer is the value of 'answer' when X = 525. Fill it in below.
+
+Example:
+5 = 1 * 1 + 1 + 3
+
+12 = 2 * 2 + 5 + 3
+
+24 = 3 * 3 + 12 + 3
+........................
+........................
+
+**Solution**
+
+You just need to write some real code that follows the logic of the given pseudo code. I've included my python code below, but since we already have pseudo code I won't really dive into it. 
+
+```
+x = 1
+prev = 1
+final = 0
+
+while x < 526:
+	final = (x*x) + prev + 3
+	prev=final
+	x+=1
+	
+print(final)
+```
+
+**Flag**
+
+```
+48373851
+```
+
+Programming 10: A song...
+
+**Challenge**
+
+I wrote this song
+
+it seems I'm pretty bad at it, but hey! it could get you a flag :)
